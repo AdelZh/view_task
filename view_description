@@ -1,0 +1,22 @@
+CREATE ROLE canonly_read;
+grant connect on database postgres to canonly_read;
+GRANT ALL PRIVILEGES ON SCHEMA public TO canonly_read;
+grant select on account to canonly_read;
+create user nuriza;
+grant canonly_read to nuriza;
+alter user nuriza password 'java11';
+revoke connect on database postgres  from canonly_read;
+revoke all privileges an schema public from canonly_read;
+revoke select on account on account from canonly_read;
+create view product_details_view as
+select product_name, suppliers.contact_name, category_name
+from products join suppliers using(supplier_id)
+join categories using (category_id);
+select * from product_details_view;
+create or replace view product_details_view as
+select product_name, suppliers.contact_name, category_name, categories.description
+from products join suppliers using(supplier_id)
+join categories using (category_id);
+select * from product_details_view;
+select category_name, count (*) as q from product_details_view group by category_name
+select * from product_details_view where category_name='Beverages';
